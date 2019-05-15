@@ -1,45 +1,36 @@
-import { put, call, takeLatest, all } from 'redux-saga/effects'
-import jwtDecode from 'jwt-decode'
+import { put, takeLatest, all } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
-
 import { AuthActions, AuthTypes } from 'src/Stores/Authentication/Actions'
-import { AuthService } from 'src/Services/AuthService'
+import { LoadingActions } from '../Loading/Actions'
+import { NotificationActions } from '../Notification/Actions'
+import firebase from '../Firebase'
 
-/**
- * A saga can contain multiple functions.
- *
- * This example saga contains only one to fetch the weather authentication.
- * Feel free to remove it.
- */
-function* fetchAuthentication({ response }) {
-  // Dispatch a redux action using `put()`
-  // @see https://redux-saga.js.org/docs/basics/DispatchingActions.html
-  yield put(AuthActions.fetchAuthenticationLoading())
-
-  const tokenId = response.tokenId
-
-  // Fetch the authentication from an API
-  const responseResult = yield call(AuthService.fetchAuthentication, tokenId)
-
-  if (responseResult) {
-    // If Login fail
-    if (responseResult.result === 'fail') {
-      throw new Error(responseResult.errorMessage)
-    }
-    console.log(responseResult)
-    // If login success
-    yield put(
-      AuthActions.fetchAuthenticationSuccess(jwtDecode(responseResult.token))
+function* registerWorker({ values }) {
+  try {
+    yield put(LoadingActions.showLoadingAction())
+    const authUser = yield firebase.doCreateUserWithEmailAndPassword(
+      values.email,
+      values.password
     )
-    yield put(push('/'))
-  } else {
+    yield authUser.user.updateProfile({
+      displayname: values.name,
+    })
+    yield put(AuthActions.registerSuccess())
+    yield put(push('/login'))
     yield put(
-      AuthActions.fetchAuthenticationFailure(
-        'There was an error while fetching the authentication.'
+      NotificationActions.showNotification(
+        'Register',
+        'Register Success',
+        'blue'
       )
     )
+    yield put(LoadingActions.hideLoadingAction())
+  } catch (error) {
+    yield put(AuthActions.registerFailure())
+    yield put(LoadingActions.hideLoadingAction())
   }
 }
+
 export default function* watcher() {
-  yield all([takeLatest(AuthTypes.FETCH_AUTHENTICATION, fetchAuthentication)])
+  yield all([takeLatest(AuthTypes.REGISTER_REQUEST, registerWorker)])
 }

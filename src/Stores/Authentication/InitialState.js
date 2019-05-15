@@ -7,6 +7,14 @@ export const MODULE_NAME = 'auth'
 
 export const INITIAL_STATE = Map({
   userData: null,
-  authenticationErrorMessage: null,
-  authenticationIsLoading: false,
+  registerItem: {
+    userName: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+  },
+  loginItem: {
+    email: '',
+    password: '',
+  },
 })
