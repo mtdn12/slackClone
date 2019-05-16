@@ -30,7 +30,7 @@ const persistConfig = {
   /**
    * Blacklist state that we do not need/want to persist
    */
-  blacklist: ['router', 'notification', 'loading'],
+  blacklist: ['router', 'notification', 'loading', 'auth'],
 }
 
 const createRootStore = history => {

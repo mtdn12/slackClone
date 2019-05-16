@@ -1,18 +1,22 @@
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import PrivateRoute from 'src/Containers/PrivateRoute'
-import PrivateRouteWithTemplate from 'src/Containers/PrivateRouteWithTemplate'
+import { Route, Switch } from 'react-router-dom'
 import ErrorBoundary from './pages/ErrorBoundary'
-import * as routes from './routes'
+import * as asyncComponents from './asyncComponents'
+import Routes from '../Constants/Routes'
 
-const App = () => (
-  <ErrorBoundary>
-    <Switch>
-      <Route path="/login" component={routes.AsyncLogin} />
-      <Route path="/register" component={routes.AsyncRegister} />
-      <Route component={routes.AsyncNotFound} />
-    </Switch>
-  </ErrorBoundary>
-)
+const App = () => {
+  return (
+    <ErrorBoundary>
+      <Switch>
+        <Route path={Routes.LOG_IN} component={asyncComponents.AsyncLogin} />
+        <Route
+          path={Routes.REGISTER}
+          component={asyncComponents.AsyncRegister}
+        />
+        <Route component={asyncComponents.AsyncNotFound} />
+      </Switch>
+    </ErrorBoundary>
+  )
+}
 
 export default App

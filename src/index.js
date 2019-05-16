@@ -12,7 +12,9 @@ import './index.css'
 import createStore from './Stores/CreateStore.js'
 // import configureStore from './store/configureStore'
 import registerServiceWorker from './registerServiceWorker'
-import App from 'src/Components/App'
+import App from 'src/Containers/App'
+// Firebase context
+import firebase, { FirebaseContext } from './Stores/Firebase'
 // const initialState = Immutable.Map()
 const history = createHashHistory()
 
@@ -27,7 +29,9 @@ async function init() {
       <Provider store={store}>
         <PersistGate loading={<div />} persistor={store.persistor}>
           <ConnectedRouter history={history}>
-            <App />
+            <FirebaseContext.Provider value={firebase}>
+              <App />
+            </FirebaseContext.Provider>
           </ConnectedRouter>
         </PersistGate>
       </Provider>,
