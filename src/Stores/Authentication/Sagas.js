@@ -44,18 +44,11 @@ function* registerWorker({ values }) {
 function* loginWorker({ values }) {
   try {
     yield put(LoadingActions.showLoadingAction())
-    const authUser = yield firebase.doSignInWithEmailAndPassword(
-      values.email,
-      values.password
-    )
+    yield firebase.doSignInWithEmailAndPassword(values.email, values.password)
 
     yield put(AuthActions.loginSuccess())
     yield put(
-      NotificationActions.showNotification(
-        'Register',
-        'Register Success',
-        'blue'
-      )
+      NotificationActions.showNotification('Login', 'Login Success', 'blue')
     )
     yield put(LoadingActions.hideLoadingAction())
   } catch (error) {
@@ -68,9 +61,23 @@ function* loginWorker({ values }) {
   }
 }
 
+function* logoutWorker({}) {
+  try {
+    yield firebase.doSignOut()
+    yield put(AuthActions.logoutSuccess())
+    yield put(push('/login'))
+  } catch (error) {
+    yield put(AuthActions.logoutFailure())
+    yield put(
+      NotificationActions.showNotification('Logout', error.message, 'red')
+    )
+  }
+}
+
 export default function* watcher() {
   yield all([
     takeLatest(AuthTypes.REGISTER_REQUEST, registerWorker),
     takeLatest(AuthTypes.LOGIN_REQUEST, loginWorker),
+    takeLatest(AuthTypes.LOGOUT_REQUEST, logoutWorker),
   ])
 }

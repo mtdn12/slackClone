@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import ErrorBoundary from './pages/ErrorBoundary'
 import * as asyncComponents from './asyncComponents'
+import PrivateRoute from '../Containers/PrivateRoute'
 import Routes from '../Constants/Routes'
 
 const App = () => {
@@ -12,6 +13,10 @@ const App = () => {
         <Route
           path={Routes.REGISTER}
           component={asyncComponents.AsyncRegister}
+        />
+        <PrivateRoute
+          path={Routes.HOMEPAGE}
+          component={asyncComponents.AsyncHomePage}
         />
         <Route component={asyncComponents.AsyncNotFound} />
       </Switch>

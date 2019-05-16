@@ -25,6 +25,8 @@ class Firebase {
     this.auth.createUserWithEmailAndPassword(email, password)
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password)
+  // Sigout
+  doSignOut = () => this.auth.signOut()
   // Save user to data base
   doSaveUserToDatabase = user =>
     this.userRef.child(user.uid).set({
@@ -38,19 +40,20 @@ class Firebase {
   onAuthUserListener = (next, fallback) =>
     this.auth.onAuthStateChanged(auth => {
       if (auth) {
-        this.user(auth.uid)
-          .once('value')
-          .then(snapshot => {
-            const dbUser = snapshot.val()
-            auth = {
-              uid: auth.uid,
-              email: auth.email,
-              emailVerified: auth.emailVerified,
-              providerData: auth.providerData,
-              ...dbUser,
-            }
-            next(auth)
-          })
+        // this.user(auth.uid)
+        //   .once('value')
+        //   .then(snapshot => {
+        //     const dbUser = snapshot.val()
+        //     auth = {
+        //       uid: auth.uid,
+        //       email: auth.email,
+        //       emailVerified: auth.emailVerified,
+        //       providerData: auth.providerData,
+        //       ...dbUser,
+        //     }
+        //     next(auth)
+        //   })
+        next(auth)
       } else {
         fallback()
       }

@@ -10,6 +10,10 @@ const { Types, Creators } = createActions(
     loginRequest: ['values'],
     loginSuccess: ['item'],
     loginFailure: null,
+    // Logout:
+    logoutRequest: null,
+    logoutSuccess: null,
+    logoutFailure: null,
     // set and clear user
     setUser: ['user'],
     clearUser: null,

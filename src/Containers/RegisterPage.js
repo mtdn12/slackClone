@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { object, func, bool } from 'prop-types'
+import { object, func, bool, any } from 'prop-types'
 
 import RegisterPage from '../Components/pages/Register'
 import { AuthSelectors } from '../Stores/Authentication/Selectors'
@@ -11,7 +11,12 @@ const RegisterPageContainer = ({
   registerItem,
   doRegister,
   isLoadingAction,
+  history,
+  auth
 }) => {
+  if(auth){
+    history.push('/')
+  }
   return (
     <RegisterPage
       doRegister={doRegister}
@@ -24,6 +29,7 @@ const RegisterPageContainer = ({
 const mapStateToProps = state => ({
   registerItem: AuthSelectors.getRegisterItem(state),
   isLoadingAction: LoadingSelectors.getLoadingAction(state),
+  auth: AuthSelectors.getUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -39,6 +45,8 @@ RegisterPageContainer.propTypes = {
   registerItem: object.isRequired,
   doRegister: func.isRequired,
   isLoadingAction: bool.isRequired,
+  history: object.isRequired,
+  auth: any.isRequired,
 }
 
 export default withConnect(RegisterPageContainer)

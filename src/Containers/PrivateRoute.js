@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
+import { AuthSelectors } from '../Stores/Authentication/Selectors'
 import { Redirect, Route } from 'react-router-dom'
 
 const PrivateRoute = ({ component: Component, userData, ...rest }) => {
@@ -32,10 +33,8 @@ PrivateRoute.propTypes = {
   userData: PropTypes.object,
 }
 
-const mapStateToProps = state => {
-  return {
-    userData: state.auth.get('userData'),
-  }
-}
+const mapStateToProps = state => ({
+  userData: AuthSelectors.getUser(state),
+})
 
 export default connect(mapStateToProps)(PrivateRoute)

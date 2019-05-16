@@ -23,3 +23,10 @@ export const AsyncRegister = Loadable({
     ),
   loading: LoadingPage,
 })
+
+// Home page
+export const AsyncHomePage = Loadable({
+  loader: () =>
+    import('./pages/HomePage' /* webpackChunkName: "RegisterPage" */),
+  loading: LoadingPage,
+})

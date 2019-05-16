@@ -9,6 +9,8 @@ const clearUser = state => state.set('userData', null)
 const reducer = createReducer(INITIAL_STATE, {
   [AuthTypes.SET_USER]: setUser,
   [AuthTypes.CLEAR_USER]: clearUser,
+  // Clear user when logout success
+  [AuthTypes.LOGOUT_SUCCESS]: clearUser,
 })
 
 export default reducer
