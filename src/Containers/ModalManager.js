@@ -7,11 +7,19 @@ import { getLoadingAction } from '../Stores/Loading/Selectors'
 import ConfirmationDialog from '../Components/molecules/ConfirmationDialog'
 import LoginModal from '../Components/organisms/LoginModal'
 import RegisterModal from '../Components/organisms/RegisterModal'
+// Create Chanel modal
+import CreateChanelModal from './CreateChanelModal'
 
-const modalLookup = { ConfirmationDialog, LoginModal, RegisterModal }
+const modalLookup = {
+  ConfirmationDialog,
+  LoginModal,
+  RegisterModal,
+  CreateChanelModal,
+}
 
 const Modal = props => {
   const { modal, isLoadingAction, handleClose } = props
+  console.log(handleClose)
   if (modal) {
     const { modalType, modalProps } = modal.toJS()
     const ModalShow = modalLookup[modalType]

@@ -3,8 +3,9 @@ import { func, object } from 'prop-types'
 import { Menu } from 'semantic-ui-react'
 
 import UserPanel from '../../molecules/UserPanel'
+import Chanels from '../../molecules/Chanels'
 
-const SidePanel = ({ doLogout, user }) => {
+const SidePanel = ({ doLogout, user, handleCreateChanel }) => {
   return (
     <Menu
       size="large"
@@ -16,6 +17,7 @@ const SidePanel = ({ doLogout, user }) => {
         fontsize: '1.2rem',
       }}>
       <UserPanel doLogout={doLogout} user={user} />
+      <Chanels chanels={[]} handleCreateChanel={handleCreateChanel} />
     </Menu>
   )
 }
@@ -23,6 +25,7 @@ const SidePanel = ({ doLogout, user }) => {
 SidePanel.propTypes = {
   user: object.isRequired,
   doLogout: func.isRequired,
+  handleCreateChanel: func.isRequired,
 }
 
 export default SidePanel

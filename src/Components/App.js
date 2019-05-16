@@ -4,6 +4,7 @@ import ErrorBoundary from './pages/ErrorBoundary'
 import * as asyncComponents from './asyncComponents'
 import PrivateRoute from '../Containers/PrivateRoute'
 import Routes from '../Constants/Routes'
+import Modal from '../Containers/ModalManager'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         />
         <Route component={asyncComponents.AsyncNotFound} />
       </Switch>
+      <Modal />
     </ErrorBoundary>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { func, object } from 'prop-types'
-import { Grid, Header, Icon, Dropdown } from 'semantic-ui-react'
+import { Grid, Header, Icon, Dropdown, Image } from 'semantic-ui-react'
 
 const UserPanel = ({ doLogout, user }) => {
   const dropdownOptions = () => [
@@ -31,11 +31,19 @@ const UserPanel = ({ doLogout, user }) => {
             <Icon name="code" />
             <Header.Content>DevChat</Header.Content>
           </Header>
+          {/* User dropdow */}
+          <Header style={{ padding: '0.25em' }} as="h4" inverted>
+            <Dropdown
+              trigger={
+                <span>
+                  <Image src={user.photoURL} avatar />
+                  {user.displayName}
+                </span>
+              }
+              options={dropdownOptions()}
+            />
+          </Header>
         </Grid.Row>
-        {/* User dropdow */}
-        <Header style={{ padding: '0.25em' }} as="h4" inverted>
-          <Dropdown trigger={<span>User</span>} options={dropdownOptions()} />
-        </Header>
       </Grid.Column>
     </Grid>
   )
