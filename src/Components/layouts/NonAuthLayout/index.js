@@ -1,13 +1,13 @@
 import React from 'react'
 import { node } from 'prop-types'
 
-import Notification from '../../../Containers/Notification'
+// import Notification from '../../../Containers/Notification'
 
 const NonAuthLayout = ({ children }) => {
   return (
     <div className="app">
       {children}
-      <Notification />
+      {/* <Notification /> */}
     </div>
   )
 }

@@ -10,17 +10,14 @@ export const AsyncNotFound = Loadable({
 
 // Login page
 export const AsyncLogin = Loadable({
-  loader: () =>
-    import('src/Containers/LoginPage' /* webpackChunkName: "LoginPage" */),
+  loader: () => import('./pages/Login' /* webpackChunkName: "LoginPage" */),
   loading: LoadingPage,
 })
 
 // Register page
 export const AsyncRegister = Loadable({
   loader: () =>
-    import(
-      'src/Containers/RegisterPage' /* webpackChunkName: "RegisterPage" */
-    ),
+    import('./pages/Register' /* webpackChunkName: "RegisterPage" */),
   loading: LoadingPage,
 })
 

@@ -1,27 +1,27 @@
-import { createActions } from 'reduxsauce'
 import { MODULE_NAME } from './InitialState'
 
-const { Types, Creators } = createActions(
-  {
-    registerRequest: ['values'],
-    registerSuccess: null,
-    registerFailure: null,
-    // Login
-    loginRequest: ['values'],
-    loginSuccess: ['item'],
-    loginFailure: null,
-    // Logout:
-    logoutRequest: null,
-    logoutSuccess: null,
-    logoutFailure: null,
-    // set and clear user
-    setUser: ['user'],
-    clearUser: null,
-  },
-  {
-    prefix: `@@${MODULE_NAME}/`,
-  }
-)
+const SET_USER = `@@${MODULE_NAME}/SET_USER`
 
-export const AuthTypes = Types
-export const AuthActions = Creators
+const CLEAR_USER = `@@${MODULE_NAME}/CLEAR_USER`
+
+// Actions creator
+export const setUser = user => ({
+  type: SET_USER,
+  user,
+})
+
+export const clearUser = () => ({
+  type: CLEAR_USER,
+})
+
+export const actionsHandler = {
+  [SET_USER]: (state, action) => ({
+    ...state,
+    userData: action.user,
+    isCheckAuthen: false,
+  }),
+  [CLEAR_USER]: state => ({
+    ...state,
+    userData: null,
+  }),
+}

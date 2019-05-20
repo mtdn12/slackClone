@@ -1,17 +1,32 @@
-import { createActions } from 'reduxsauce'
 import { MODULE_NAME } from './InitialState'
 
-const { Types, Creators } = createActions(
-  {
-    // SetModal
-    setModal: ['modalType', 'modalProps'],
-    // Clear Modal
-    clearModal: null,
-  },
-  {
-    prefix: `@@${MODULE_NAME}/`,
-  }
-)
+const SET_MODAL = `@@${MODULE_NAME}/SET_MODAL`
+const CLEAR_MODAL = `@@${MODULE_NAME}/CLEAR_MODAL`
 
-export const ModalTypes = Types
-export const ModalActions = Creators
+// Action creator
+
+export const setModal = (modalType, props) => ({
+  type: SET_MODAL,
+  modalType,
+  props,
+})
+
+export const clearModal = () => ({
+  type: CLEAR_MODAL,
+})
+
+// Action handler
+
+export const actionsHandler = {
+  [SET_MODAL]: (state, action) => ({
+    ...state,
+    modal: {
+      type: action.modalType,
+      props: action.props,
+    },
+  }),
+  [CLEAR_MODAL]: (state, action) => ({
+    ...state,
+    modal: null,
+  }),
+}

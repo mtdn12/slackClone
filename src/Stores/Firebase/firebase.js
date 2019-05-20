@@ -19,6 +19,8 @@ class Firebase {
     this.auth = app.auth()
     this.db = app.database()
     this.userRef = this.db.ref('users')
+    this.channelRef = this.db.ref('channels')
+    this.messageRef = this.db.ref('messages')
   }
   // Create and Sign in user
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -37,27 +39,56 @@ class Firebase {
   user = uid => this.db.ref(`users/${uid}`)
 
   // Action when auth stage change
-  onAuthUserListener = (next, fallback) =>
+  onAuthUserListener = callback =>
     this.auth.onAuthStateChanged(auth => {
-      if (auth) {
-        // this.user(auth.uid)
-        //   .once('value')
-        //   .then(snapshot => {
-        //     const dbUser = snapshot.val()
-        //     auth = {
-        //       uid: auth.uid,
-        //       email: auth.email,
-        //       emailVerified: auth.emailVerified,
-        //       providerData: auth.providerData,
-        //       ...dbUser,
-        //     }
-        //     next(auth)
-        //   })
-        next(auth)
-      } else {
-        fallback()
-      }
+      callback(auth)
     })
+  // Create channel
+  doCreateChannel = values => {
+    return new Promise((resolve, reject) => {
+      const key = this.channelRef.push().key
+      const newChannel = {
+        id: key,
+        name: values.channelName,
+        details: values.channelDetails,
+        createdBy: {
+          name: values.user.displayName,
+          avatar: values.user.photoURL,
+        },
+      }
+      resolve(this.channelRef.child(key).update(newChannel))
+    })
+  }
+  // on channel changes listenr
+  onChannelsChangeListener = callback => {
+    this.channelRef.on('child_added', snap => {
+      callback(snap.val())
+    })
+  }
+  // Remove listener
+  offChannelsListener = () => {
+    this.channelRef.off()
+  }
+  // Messages api
+  doCreateMessage = data => {
+    return new Promise((resolve, reject) => {
+      const message = {
+        user: {
+          id: data.user.uid,
+          name: data.user.displayName,
+          avatar: data.user.photoURL,
+        },
+        content: data.message,
+        timestamp: app.database.ServerValue.TIMESTAMP,
+      }
+      return this.messageRef
+        .child(data.channel.id)
+        .push()
+        .set(message)
+        .then(() => resolve('Create message success'))
+        .catch(err => reject(err))
+    })
+  }
 }
 
 export default new Firebase()

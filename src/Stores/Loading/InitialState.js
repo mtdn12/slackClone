@@ -1,12 +1,8 @@
-import { fromJS } from 'immutable'
 
-/**
- * The initial values for the redux state.
- */
 export const MODULE_NAME = 'loading'
 
-export const INITIAL_STATE = fromJS({
+export const INITIAL_STATE = {
   isLoadingAction: false,
   isLoadingList: false,
   isLoadingItems: {},
-})
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { bool } from 'prop-types'
 import { Loader } from 'semantic-ui-react'
 
-import AnnouncementTemplate from '../../templates/AnnouncementTemplate'
+
 
 const LoadingPage = props => {
   if (props.error) {
@@ -10,9 +10,9 @@ const LoadingPage = props => {
     throw new Error(`Couldn't load LoadingPage`)
   }
   return (
-    <AnnouncementTemplate>
+    <div>
       <Loader active inline="centered" />
-    </AnnouncementTemplate>
+    </div>
   )
 }
 

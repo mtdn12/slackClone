@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { node } from 'prop-types'
 
-import AnnouncementTemplate from '../../templates/AnnouncementTemplate'
+
 
 class ErrorBoundary extends PureComponent {
   static propTypes = {
@@ -19,11 +19,7 @@ class ErrorBoundary extends PureComponent {
 
   render() {
     if (this.state.hasError) {
-      return (
-        <AnnouncementTemplate>
-          Something is wrong here! Please try refresh.
-        </AnnouncementTemplate>
-      )
+      return <div>Something is wrong here! Please try refresh.</div>
     }
 
     return this.props.children

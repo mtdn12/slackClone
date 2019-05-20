@@ -1,5 +1,4 @@
-import React from 'react'
-import { func, object, bool } from 'prop-types'
+import React, { useContext, useState } from 'react'
 import {
   Grid,
   Form,
@@ -12,6 +11,10 @@ import {
 import { Link } from 'react-router-dom'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { StoreContext } from '../../../Stores/StoreContext'
+import { FirebaseContext } from '../../../Stores/Firebase'
+import { showNotification } from '../../../Stores/Notification/Actions'
+import md5 from 'md5'
 
 // Layout for non auth user
 import Layout from '../../layouts/NonAuthLayout'
@@ -22,7 +25,38 @@ const renderErrors = (errors, touched) => {
     .map(e => errors[e])
 }
 
-const RegisterPage = ({ registerItem, doRegister, isLoadingAction }) => {
+const RegisterPage = () => {
+  // State check loading action
+  const [isLoadingAction, setLoadingAction] = useState(false)
+  // firebase
+  const firebase = useContext(FirebaseContext)
+  // state context
+  const { state, dispatch } = useContext(StoreContext)
+  const handleRegister = values => {
+    setLoadingAction(true)
+    firebase
+      .doCreateUserWithEmailAndPassword(values.email, values.password)
+      .then(auth => {
+        auth.user
+          .updateProfile({
+            displayName: values.userName,
+            photoURL: `http://gravatar.com/avatar/${md5(
+              auth.user.email
+            )}?d=identicon`,
+          })
+          .then(() => {
+            firebase.doSaveUserToDatabase(auth.user)
+          })
+          .then(() => {
+            setLoadingAction(false)
+            dispatch(showNotification('Register', 'Register success', 'blue'))
+          })
+      })
+      .catch(err => {
+        dispatch(showNotification('Register', err.message, 'red'))
+        setLoadingAction(false)
+      })
+  }
   return (
     <Layout>
       <Grid
@@ -35,8 +69,13 @@ const RegisterPage = ({ registerItem, doRegister, isLoadingAction }) => {
             Register for DevChat
           </Header>
           <Formik
-            initialValues={registerItem}
-            onSubmit={values => doRegister(values)}
+            initialValues={{
+              userName: '',
+              email: '',
+              password: '',
+              passwordConfirmation: '',
+            }}
+            onSubmit={values => handleRegister(values)}
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .required('Please input email')
@@ -137,12 +176,6 @@ const RegisterPage = ({ registerItem, doRegister, isLoadingAction }) => {
       </Grid>
     </Layout>
   )
-}
-
-RegisterPage.propTypes = {
-  registerItem: object.isRequired,
-  doRegister: func.isRequired,
-  isLoadingAction: bool.isRequired,
 }
 
 export default RegisterPage

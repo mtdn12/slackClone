@@ -1,13 +1,11 @@
 import { MODULE_NAME } from './InitialState'
 
-const getRegisterItem = state => state[MODULE_NAME].get('registerItem')
 
-const getLoginItem = state => state[MODULE_NAME].get('loginItem')
+const getUser = state => state[MODULE_NAME].userData
 
-const getUser = state => state[MODULE_NAME].get('userData')
+const getLoadingCheckAuthen = state => state[MODULE_NAME].isCheckAuthen
 
 export const AuthSelectors = {
-  getRegisterItem,
-  getLoginItem,
   getUser,
+  getLoadingCheckAuthen,
 }

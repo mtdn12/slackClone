@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { StoreContext } from '../../../Stores/StoreContext'
+import { FirebaseContext } from '../../../Stores/Firebase'
+import { showNotification } from '../../../Stores/Notification/Actions'
 import { func, object, bool } from 'prop-types'
 import {
   Grid,
@@ -20,7 +23,27 @@ const renderErrors = (errors, touched) => {
     .map(e => errors[e])
 }
 
-const LoginPage = ({ loginItem, doLogin, isLoadingAction }) => {
+const LoginPage = () => {
+  // State check loading action
+  const [isLoadingAction, setLoadingAction] = useState(false)
+  const { state, dispatch } = useContext(StoreContext)
+  // firebase
+  const firebase = useContext(FirebaseContext)
+  // handle login
+  const handleLogin = values => {
+    setLoadingAction(true)
+    firebase
+      .doSignInWithEmailAndPassword(values.email, values.password)
+      .then(() => {
+        dispatch(showNotification('Login', 'Login success', 'blue'))
+        setLoadingAction(false)
+      })
+      .catch(err => {
+        dispatch(showNotification('Login', err.message, 'red'))
+        setLoadingAction(false)
+        console.log('Error log in', err.message)
+      })
+  }
   return (
     <Layout>
       <Grid
@@ -33,8 +56,11 @@ const LoginPage = ({ loginItem, doLogin, isLoadingAction }) => {
             Login for DevChat
           </Header>
           <Formik
-            initialValues={loginItem}
-            onSubmit={values => doLogin(values)}
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={values => handleLogin(values)}
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .required('Please input email')
@@ -106,10 +132,6 @@ const LoginPage = ({ loginItem, doLogin, isLoadingAction }) => {
   )
 }
 
-LoginPage.propTypes = {
-  loginItem: object.isRequired,
-  doLogin: func.isRequired,
-  isLoadingAction: bool.isRequired,
-}
+LoginPage.propTypes = {}
 
 export default LoginPage

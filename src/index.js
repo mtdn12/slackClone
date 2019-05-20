@@ -1,45 +1,31 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createHashHistory } from 'history'
-import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router/immutable'
-import { PersistGate } from 'redux-persist/lib/integration/react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import 'core-js'
 // import 'typeface-roboto'
 import 'semantic-ui-css/semantic.min.css'
 import './index.css'
 
-import createStore from './Stores/CreateStore.js'
 // import configureStore from './store/configureStore'
 import registerServiceWorker from './registerServiceWorker'
 import App from 'src/Containers/App'
 // Firebase context
 import firebase, { FirebaseContext } from './Stores/Firebase'
-// const initialState = Immutable.Map()
-const history = createHashHistory()
 
 async function init() {
-  // const store = await configureStore(initialState, history)
-  const store = createStore(history)
-
   const MOUNT_NODE = document.getElementById('root')
-
   const render = () =>
     ReactDOM.render(
-      <Provider store={store}>
-        <PersistGate loading={<div />} persistor={store.persistor}>
-          <ConnectedRouter history={history}>
-            <FirebaseContext.Provider value={firebase}>
-              <App />
-            </FirebaseContext.Provider>
-          </ConnectedRouter>
-        </PersistGate>
-      </Provider>,
+      <Router>
+        <FirebaseContext.Provider value={firebase}>
+          <App />
+        </FirebaseContext.Provider>
+      </Router>,
       MOUNT_NODE
     )
 
   if (module.hot) {
-    module.hot.accept('src/Components/App', () => {
+    module.hot.accept('src/Containers/App', () => {
       ReactDOM.unmountComponentAtNode(MOUNT_NODE)
       render()
     })

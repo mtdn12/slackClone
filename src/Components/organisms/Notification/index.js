@@ -1,49 +1,37 @@
-import React, { Component } from 'react'
-import { bool, string, func } from 'prop-types'
+import React, { useContext, useState } from 'react'
 import { TransitionablePortal, Message } from 'semantic-ui-react'
+import { StoreContext } from '../../../Stores/StoreContext'
+import { hideNotification } from '../../../Stores/Notification/Actions'
 import styles from './styles.module.scss'
 
-class Notification extends Component {
-  static propTypes = {
-    onClose: func,
-  }
-  state = {
+const Notification = () => {
+  const [transition, _] = useState({
     animation: 'fade up',
     duration: 500,
+  })
+  const [state, dispatch] = useContext(StoreContext)
+  const { title, color, open, message } = state.notification
+  console.log(state.notification)
+  const onClose = () => {
+    dispatch(hideNotification())
   }
-  componentDidMount() {
-    /* setTimeout(() => {
-      this.props.onClose()
-    }, 1000) */
-  }
-  render() {
-    const { open, onClose, color, message, title } = this.props
-    const { animation, duration } = this.state
-    return (
-      <TransitionablePortal
-        closeOnTriggerClick
-        open={open}
-        transition={{ animation, duration }}
-        onClose={onClose}>
-        <Message
-          color={color}
-          attached="top"
-          className={styles.messageWrapper}
-          onDismiss={onClose}
-          header={title}
-          content={message}
-        />
-      </TransitionablePortal>
-    )
-  }
-}
-
-Notification.propTypes = {
-  open: bool,
-  onClose: func,
-  color: string,
-  message: string,
-  title: string,
+  console.log('Notification run')
+  return (
+    <TransitionablePortal
+      closeOnTriggerClick
+      open={open}
+      transition={{ ...transition }}
+      onClose={onClose}>
+      <Message
+        color={color}
+        attached="top"
+        className={styles.messageWrapper}
+        onDismiss={onClose}
+        header={title}
+        content={message}
+      />
+    </TransitionablePortal>
+  )
 }
 
 export default Notification
