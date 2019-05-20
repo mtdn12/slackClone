@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react'
-import { object } from 'prop-types'
+import { object, func } from 'prop-types'
 import { Segment, Button, Input } from 'semantic-ui-react'
 import { FirebaseContext } from '../../../Stores/Firebase'
+import ProgressBar from '../ProgressBar'
 
-const MessagesForm = ({ user, currentChannel }) => {
+const MessagesForm = ({ user, currentChannel, handleUploadMedia }) => {
   const [message, setMessage] = useState('')
   const [errors, setError] = useState({})
   const [touched, setTouched] = useState({})
@@ -72,6 +73,7 @@ const MessagesForm = ({ user, currentChannel }) => {
         />
         <Button
           color="teal"
+          onClick={handleUploadMedia}
           content="Upload Media"
           labelPosition="right"
           icon="cloud upload"
@@ -84,6 +86,7 @@ const MessagesForm = ({ user, currentChannel }) => {
 MessagesForm.propTypes = {
   user: object.isRequired,
   currentChannel: object.isRequired,
+  handleUploadMedia: func.isRequired,
 }
 
 export default MessagesForm

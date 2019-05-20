@@ -16,11 +16,13 @@ var config = {
 class Firebase {
   constructor() {
     app.initializeApp(config)
+    this.database = app.database
     this.auth = app.auth()
     this.db = app.database()
     this.userRef = this.db.ref('users')
     this.channelRef = this.db.ref('channels')
     this.messageRef = this.db.ref('messages')
+    this.storageRef = app.storage().ref()
   }
   // Create and Sign in user
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -78,8 +80,12 @@ class Firebase {
           name: data.user.displayName,
           avatar: data.user.photoURL,
         },
-        content: data.message,
         timestamp: app.database.ServerValue.TIMESTAMP,
+      }
+      if (data.content) {
+        message['content'] = data.message
+      } else {
+        message['image'] = data.image
       }
       return this.messageRef
         .child(data.channel.id)

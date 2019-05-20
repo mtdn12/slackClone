@@ -5,6 +5,7 @@ import MessageForm from '../../molecules/MessageForm'
 import Message from '../../molecules/Message'
 import { StoreContext } from '../../../Stores/StoreContext'
 import { FirebaseContext } from '../../../Stores/Firebase'
+import { setModal } from '../../../Stores/Modal/Actions'
 
 const Messages = () => {
   // set state for messages
@@ -23,13 +24,16 @@ const Messages = () => {
     firebase.messageRef.child(currentChannel.id).on('child_added', snap => {
       newMessages.push(snap.val())
       let messagesAdd = [...newMessages]
-      console.log(newMessages)
       setMessages(messagesAdd)
     })
     return () => {
       firebase.messageRef.child(currentChannel.id).off()
     }
   }, [currentChannel.id])
+  // Open modal upload image
+  const handleUploadMedia = () => {
+    dispatch(setModal('ModalUploadMedia', {}))
+  }
   const displayMessages = messages => {
     return (
       messages.length > 0 &&
@@ -38,7 +42,6 @@ const Messages = () => {
       ))
     )
   }
-  console.log(messages, "Check messages")
   return (
     <React.Fragment>
       <MessagesHeader />
@@ -47,7 +50,11 @@ const Messages = () => {
           {displayMessages(messages)}
         </Comment.Group>
       </Segment>
-      <MessageForm user={user} currentChannel={currentChannel} />
+      <MessageForm
+        user={user}
+        currentChannel={currentChannel}
+        handleUploadMedia={handleUploadMedia}
+      />
     </React.Fragment>
   )
 }

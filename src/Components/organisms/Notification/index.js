@@ -11,11 +11,9 @@ const Notification = () => {
   })
   const [state, dispatch] = useContext(StoreContext)
   const { title, color, open, message } = state.notification
-  console.log(state.notification)
   const onClose = () => {
     dispatch(hideNotification())
   }
-  console.log('Notification run')
   return (
     <TransitionablePortal
       closeOnTriggerClick
