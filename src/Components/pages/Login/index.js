@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { StoreContext } from '../../../Stores/StoreContext'
 import { FirebaseContext } from '../../../Stores/Firebase'
 import { showNotification } from '../../../Stores/Notification/Actions'
-import { func, object, bool } from 'prop-types'
+import { object } from 'prop-types'
 import {
   Grid,
   Form,
@@ -23,10 +23,14 @@ const renderErrors = (errors, touched) => {
     .map(e => errors[e])
 }
 
-const LoginPage = () => {
+const LoginPage = ({ history }) => {
   // State check loading action
   const [isLoadingAction, setLoadingAction] = useState(false)
-  const { state, dispatch } = useContext(StoreContext)
+  const [state, dispatch] = useContext(StoreContext)
+  // Check if login or not
+  if (state.auth.userData) {
+    history.push('/')
+  }
   // firebase
   const firebase = useContext(FirebaseContext)
   // handle login
@@ -132,6 +136,8 @@ const LoginPage = () => {
   )
 }
 
-LoginPage.propTypes = {}
+LoginPage.propTypes = {
+  history: object.isRequired,
+}
 
 export default LoginPage

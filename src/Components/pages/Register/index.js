@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import {object} from 'prop-types'
 import {
   Grid,
   Form,
@@ -25,13 +26,17 @@ const renderErrors = (errors, touched) => {
     .map(e => errors[e])
 }
 
-const RegisterPage = () => {
+const RegisterPage = ({history}) => {
   // State check loading action
   const [isLoadingAction, setLoadingAction] = useState(false)
   // firebase
   const firebase = useContext(FirebaseContext)
   // state context
-  const { state, dispatch } = useContext(StoreContext)
+  const [state, dispatch] = useContext(StoreContext)
+  // Check if login or not
+  if(state.auth.userData){
+    history.push('/')
+  }
   const handleRegister = values => {
     setLoadingAction(true)
     firebase
@@ -176,6 +181,10 @@ const RegisterPage = () => {
       </Grid>
     </Layout>
   )
+}
+
+RegisterPage.propTypes ={
+  history: object.isRequired,
 }
 
 export default RegisterPage
